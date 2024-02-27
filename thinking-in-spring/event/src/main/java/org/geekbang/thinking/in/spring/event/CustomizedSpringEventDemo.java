@@ -31,6 +31,9 @@ public class CustomizedSpringEventDemo {
     public static void main(String[] args) {
         GenericApplicationContext context = new GenericApplicationContext();
 
+        // 报错：Exception in thread "main" java.lang.IllegalStateException: ApplicationEventMulticaster not initialized
+        // context.publishEvent(new MySpringEvent2("202011"));
+
         // 1.添加自定义 Spring 事件监听器
         // ListenerRetriever -> 0 .. N 个 ApplicationListener<MySpringEvent> 实例
         // MySpringEvent 以及它子孙类

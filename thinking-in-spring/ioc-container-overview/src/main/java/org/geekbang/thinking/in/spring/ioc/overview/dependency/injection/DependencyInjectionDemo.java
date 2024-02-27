@@ -51,8 +51,9 @@ public class DependencyInjectionDemo {
 
         System.out.println(userFactory.getObject() == applicationContext);
 
-        // 依赖查找（错误）
-//        System.out.println(beanFactory.getBean(BeanFactory.class));
+        // 依赖查找（错误），因为BeanFactory是容器内建依赖
+        // 依赖查找和依赖注入的一个区别：可以看到，内建依赖，如BeanFactory，不能依赖查找，可以依赖注入。
+        // System.out.println(applicationContext.getBean(BeanFactory.class));
 
         // 依赖来源三：容器內建 Bean
         Environment environment = applicationContext.getBean(Environment.class);
@@ -72,6 +73,7 @@ public class DependencyInjectionDemo {
 
         // ApplicationContext is BeanFactory
 
+        // BeanFactory才是底层的IoC容器，ApplicationContext是在其基础上增加了一些特性。
     }
 
 }

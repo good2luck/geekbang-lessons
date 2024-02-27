@@ -16,8 +16,12 @@
  */
 package org.geekbang.thinking.in.spring.bean.lifecycle;
 
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.annotation.AnnotatedBeanDefinitionReader;
+import org.springframework.lang.Nullable;
 
 /**
  * 注解 BeanDefinition 解析示例
@@ -32,6 +36,22 @@ public class AnnotatedBeanDefinitionParsingDemo {
         // 基于 Java 注解的 AnnotatedBeanDefinitionReader 的实现
         AnnotatedBeanDefinitionReader beanDefinitionReader = new AnnotatedBeanDefinitionReader(beanFactory);
         int beanDefinitionCountBefore = beanFactory.getBeanDefinitionCount();
+
+        // 初始化后打印
+        // beanDefinitionReader.register仅仅注册beanDefinition，在getBean是才会实例化等
+        beanFactory.addBeanPostProcessor(new InstantiationAwareBeanPostProcessor() {
+            @Override
+            public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
+                System.out.printf("\n postProcessBeforeInstantiation beanName:%s \n", beanName);
+                return null;
+            }
+            @Nullable
+            public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+                System.out.printf("postProcessAfterInitialization beanName:%s \n", beanName);
+                return bean;
+            }
+        });
+
         // 注册当前类（非 @Component class）
         beanDefinitionReader.register(AnnotatedBeanDefinitionParsingDemo.class);
         int beanDefinitionCountAfter = beanFactory.getBeanDefinitionCount();

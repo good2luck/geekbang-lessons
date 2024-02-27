@@ -16,12 +16,16 @@
  */
 package org.geekbang.thinking.in.spring.ioc.dependency.source;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.annotation.PostConstruct;
+import java.util.stream.Stream;
 
 /**
  * ResolvableDependency 作为依赖来源
@@ -46,6 +50,8 @@ public class ResolvableDependencySourceDemo {
 
         // 注册 Configuration Class（配置类） -> Spring Bean
         applicationContext.register(ResolvableDependencySourceDemo.class);
+        // 同样在refresh 调用 invokeBeanFactoryPostProcessors时，该bean会被查询到进行调用postProcessorBeanFactory方法
+        applicationContext.register(ResolvableBeanFactoryPostProcessor.class);
 
         applicationContext.addBeanFactoryPostProcessor(beanFactory -> {
             // 注册 Resolvable Dependency
@@ -55,8 +61,24 @@ public class ResolvableDependencySourceDemo {
         // 启动 Spring 应用上下文
         applicationContext.refresh();
 
+        String[] postProcessorNames =
+                applicationContext.getBeanFactory().getBeanNamesForType(BeanFactoryPostProcessor.class, true, false);
+        Stream.of(postProcessorNames).forEach(System.out::println);
+
         // 显示地关闭 Spring 应用上下文
         applicationContext.close();
     }
 
+    static class ResolvableBeanFactoryPostProcessor implements BeanDefinitionRegistryPostProcessor {
+
+        @Override
+        public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+            System.out.println("ResolvableBeanFactoryPostProcessor#postProcessBeanFactory");
+        }
+
+        @Override
+        public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
+            System.out.println("ResolvableBeanFactoryPostProcessor#postProcessBeanDefinitionRegistry");
+        }
+    }
 }

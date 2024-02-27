@@ -12,8 +12,9 @@
 
     <artifactId>generic</artifactId>
 
-    <properties>
-        <spring.version>4.3.26.RELEASE</spring.version>
-    </properties>
+        <!-- 使不生效，不然会引入相同包不同版本 -->
+<!--    <properties>-->
+<!--        <spring.version>4.3.26.RELEASE</spring.version>-->
+<!--    </properties>-->
 
 </project>

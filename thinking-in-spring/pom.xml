@@ -35,6 +35,7 @@
 
     <properties>
         <spring.version>5.2.2.RELEASE</spring.version>
+        <spring-webflux.version>5.2.22.RELEASE</spring-webflux.version>
     </properties>
 
     <!-- Spring 依赖管理 -->

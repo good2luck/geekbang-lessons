@@ -71,6 +71,8 @@ public class DependencyLookupDemo {
     }
 
     private static void lookupInLazy(BeanFactory beanFactory) {
+        // 即使用ObjectFactoryCreatingFactoryBean时，如果lazy-init未配置，则默认为非延迟加载，即在容器启动时创建实例。
+        // 如果需要延迟加载，需要显式设置lazy-init=true，则容器启动时不会创建bean实例，getObject时才会创建。
         ObjectFactory<User> objectFactory = (ObjectFactory<User>) beanFactory.getBean("objectFactory");
         User user = objectFactory.getObject();
         System.out.println("延迟查找：" + user);

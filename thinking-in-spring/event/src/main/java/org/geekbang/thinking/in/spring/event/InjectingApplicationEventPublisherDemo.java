@@ -30,6 +30,11 @@ import javax.annotation.PostConstruct;
 /**
  * 注入 {@link ApplicationEventPublisher} 示例
  *
+ * 实现BeanPostProcessor，就会被认为是个BeanPostProcessor，在启动上下文中，
+ * this.registerBeanPostProcessors(beanFactory);时会实例化当前类，事件会被发布。但是
+ * ApplicationEventMulticaster还没有init，所有会先借助org.springframework.context.support.AbstractApplicationContext#earlyApplicationEvents
+ * 进行存储事件，等后续触发事件。
+ *
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
  * @since
  */
@@ -75,6 +80,6 @@ public class InjectingApplicationEventPublisherDemo implements ApplicationEventP
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException { // #2
-        applicationEventPublisher.publishEvent(new MySpringEvent("The event from ApplicationContextAware"));
+        applicationContext.publishEvent(new MySpringEvent("The event from ApplicationContextAware"));
     }
 }

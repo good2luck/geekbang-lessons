@@ -29,10 +29,10 @@ import java.util.Random;
  * @since
  */
 @Aspect
-@Order
+@Order(100)
 public class AspectConfiguration {
 
-    @Pointcut("execution(public * *(..))") // 匹配 Join Point
+    @Pointcut("execution(public * *())") // 匹配 Join Point
     private void anyPublicMethod() { // 方法名即 Pointcut 名
         System.out.println("@Pointcut at any public method.");
     }
